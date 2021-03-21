@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
+<link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css" media="all" /><title>Title</title>
+</head>
+<body>
+    <div class="sidenav">
+        <div class="login-main-text">
+           <h2>Driver Drowsiness Detection System<br> Login Page</h2>
+           <p>Login or register from here to access.</p>
+        </div>
+     </div>
+     <div class="main">
+        <div class="col-md-6 col-sm-12">
+           <div class="login-form">
+              <form action="" method="POST">
+                {% csrf_token %}
+                {% for field in login_form %}
+                    <p>
+                        {{field.label_tag}}
+                        <br>
+                        {{field}}
+                        <!-- {% if field.help_text %}
+                            <small style="color: grey;">{{field.help_text}}</small>
+                        {% endif %} -->
+                        {% for error in field.errors %}
+                            <small style="color: red;">{{error}}</small>
+                        {% endfor %}
+                    </p>
+                {% endfor %}
+                <button class="btn btn-black" type="submit">Login</button>
+                <a href="../">Haven't registered yet?</a>
+              </form>
+           </div>
+        </div>
+     </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
+</body>
+</html>

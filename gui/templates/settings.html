@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="login-form">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+          <p>
+              {{field.label_tag}}
+              <br>
+              {{field}}
+              {% if field.help_text %}
+                  <!-- <small style="color: grey;">{{field.help_text}}</small> -->
+              {% endif %}
+              {% for error in field.errors %}
+                  <small style="color: red;">{{error}}</small>
+              {% endfor %}
+          </p>
+      {% endfor %}
+      <button class="btn btn-black" type="submit">Save</button>
+    </form>
+ </div>
+{% endblock content %}
+    

@@ -10,36 +10,41 @@ import cv2
 import datetime
 import os
 import base64
-class VideoCamera(object):
-    def __init__(self):
-        self.video = cv2.VideoCapture(0)
+import threading
 
-    def __del__(self):
-        self.video.release()
-    def read(self):
-        return self.video.read()
-    def get_frame(self):
-        success, image = self.video.read()
-        # We are using Motion JPEG, but OpenCV defaults to capture raw images,
-        # so we must encode it into JPEG in order to correctly display the
-        # video stream.
+from playsound import playsound
 
-        # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # faces_detected = face_detection_videocam.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
-        # for (x, y, w, h) in faces_detected:
-            # cv2.rectangle(image, pt1=(x, y), pt2=(x + w, y + h), color=(255, 0, 0), thickness=2)
-        # frame_flip = cv2.flip(image,1)
-        ret, jpeg = cv2.imencode('.jpg', image)
-        return jpeg.tobytes()
 
+#getting audio to play as alarm
+
+# class VideoCamera(object):
+#     def __init__(self):
+#         self.video = cv2.VideoCapture(0)
+
+#     def __del__(self):
+#         self.video.release()
+#     def read(self):
+#         return self.video.read()
+#     def get_frame(self):
+#         success, image = self.video.read()
+#         # We are using Motion JPEG, but OpenCV defaults to capture raw images,
+#         # so we must encode it into JPEG in order to correctly display the
+#         # video stream.
+
+#         # gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+#         # faces_detected = face_detection_videocam.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5)
+#         # for (x, y, w, h) in faces_detected:
+#             # cv2.rectangle(image, pt1=(x, y), pt2=(x + w, y + h), color=(255, 0, 0), thickness=2)
+#         # frame_flip = cv2.flip(image,1)
+#         ret, jpeg = cv2.imencode('.jpg', image)
+#         return jpeg.tobytes()
 class Webcam(object):
     path = os.path.dirname(__file__)
     file_path =     os.path.join(path, "shape_predictor_68_face_landmarks.dat")
     landmarks = dlib.shape_predictor(file_path) #change to absolute path
     face_recognition = dlib.get_frontal_face_detector()
-    context= {
-        'message': ""
-    }
+    audio=os.path.join(path, "buzzer_alarm.mp3")
+    message = ""
     def __init__(self):
         self.webcam = VideoStream(src=0).start()
         time.sleep(1.0)
@@ -48,7 +53,7 @@ class Webcam(object):
         self.normal = False
         self.normal_count = 0.0
         self.normal_eye_ratio = 0
-
+        
     def eye_ratio(self, eye):
         avg_height = (abs(eye[1][1]-eye[5][1])+abs(eye[2][1]-eye[4][1]))/2
         width = abs(eye[0][0]-eye[3][0])
@@ -56,6 +61,7 @@ class Webcam(object):
 
     def stop(self):
         cv2.destroyAllWindows()
+        self.webcam.stop()
     def read(self):
         frame = self.webcam.read()
         frame = imutils.resize(frame, width=450)
@@ -112,11 +118,13 @@ class Webcam(object):
                             cv2.putText(frame, "Sleep Detector: " + str(CurrentTime), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0xFF, 0xFF, 0xFF0), 2)
                             cv2.putText(frame, "Sleeping time (seconds):" + str("%6.0f " % GPA), (10, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0xFF, 0xFF, 0xFF0), 2)
                         if ((GPA > 2) and (GPA < 5)):
+                            playsound(self.audio)
+                            self.message = "take rest"
                             cv2.putText(frame, "Alert! You should take a rest", (10, 230), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
-                            # context['message'] = "Alert! You should take a rest"
                         print("Sleeping log - Time: " + str(CurrentTime) + " Duration: " + str("%6.0f" % GPA))
                     else:
                         self.sleep_count = 0
+                        self.message = ""
             ret, jpeg = cv2.imencode('.jpg', frame)
             yield (b'--frame\r\n'
                     b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n\r\n')

@@ -41,7 +41,7 @@ class Account(AbstractBaseUser):
     phone_regex = RegexValidator(regex=r'^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[789]\d{9}$', message="Incorrect phone number format")
     phone_number = models.CharField(verbose_name='Phone Number', validators=[phone_regex], max_length=17, blank=True)
     emergency_phn = models.CharField(verbose_name='Emergency Phone Number', validators=[phone_regex], max_length=17, blank=True)
-    
+    alert_tone = models.FileField(verbose_name="Alert Tone", upload_to='media/alerts', default="buzzer_alarm.mp3")
     
     
     date_joined	= models.DateTimeField(verbose_name='date joined', auto_now_add=True)

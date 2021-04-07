@@ -22,15 +22,19 @@
    <div class="main">
       <div class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
          <div class="ms-auto mb-2 mb-lg-0">
+            <!-- <span class="btn material-icons " style="font-size: 30px;" >settings</span> -->
+            <!-- <span class="btn material-icons " style="font-size: 30px;" >account_circle</span> -->
             <a href="{% url 'settings' %}"> <span class="btn material-icons " style="font-size: 30px;" >settings</span></a>           
             <a href="#"> <span class="btn material-icons " style="font-size: 30px;" >account_circle</span></a>           
             <a href="{% url 'logout' %}"> <span class="btn material-icons " style="font-size: 30px;" >logout</span></a>           
          </div>
       </div>
-      <div class="col-md-6 col-sm-12">
-         <img src="{% url 'webcam feed' %}" alt="" srcset="">
-      </div>
-      <p>Alert:  {{message}}</p>
+
+
+{% block content %}
+    content
+{% endblock content %}
+    
    </div>
    <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>

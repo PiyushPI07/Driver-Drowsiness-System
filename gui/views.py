@@ -9,8 +9,12 @@ import gzip
 from .camera import Webcam
 from .models import *
 from .forms import *
-
+# global web_cam
 # Create your views here.
+# while True:
+#     print(context)
+
+message = ""
 def home(request):
     context = {
 
@@ -27,13 +31,14 @@ def video_feed(request):
     return StreamingHttpResponse(gen(VideoCamera()),
                     content_type='multipart/x-mixed-replace; boundary=frame')
 def webcam_feed(request):
+    global web_cam, message
     web_cam = Webcam()
     return StreamingHttpResponse(web_cam.read(),
                     content_type='multipart/x-mixed-replace; boundary=frame')
     # return render(request, 'camera.html', {'img':web_cam.read()})
 
-def webcam_home(request):
-    return render(request, 'camera.html')
+def webcam_home(request):   
+    return render(request, 'camera.html', context={})
 def registration_view(request):
     context = {}
     if request.method == 'POST':
@@ -65,6 +70,37 @@ def login_view(request):
         form = LoginForm()
     return render(request, 'login.html', context={'login_form':form})
 
+def settings_view(request):
+    context = {}
+    if request.user.is_authenticated:
+        user = Account.objects.get(email=request.user.email)
+        # if request.method == 'POST':
+        # initial = {
+        #     'dl_number': user.dl_number,
+        #     'driver_name': user.driver_name,
+        #     'email': user.email,
+        #     # 'phone_number': user.phone_number,
+        #     # 'emergency_phn': user.emergency_phn,
+        # }
+        edit_form = SettingsForm(request.POST or None, instance=user)
+        print(edit_form.data.keys())
+        if edit_form.is_valid():
+            # edit_form.cleaned_data['dl_number'] = user.dl_number
+            # edit_form.cleaned_data['driver_name'] = user.driver_name
+            # edit_form.cleaned_data['email'] = user.email
+            edit_form.save()
+            print("saved")
+            # else:
+            #     context['form']= edit_form
+        # else:
+        #     edit_form = SettingsForm(instance=user)
+        #     context['form'] = edit_form
+        context['form'] = edit_form
+        return render(request, 'settings.html', context)
+    else:
+        return redirect('login')
 def logout_view(request):
+    global web_cam
+    web_cam.stop()
     logout(request)
     return redirect('login')

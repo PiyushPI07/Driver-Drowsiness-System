@@ -1,25 +1,59 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-<div class="login-form">
+
+<style>
+    .info{
+        margin: 50px 0 100px 10px;
+    }
+    .login-form{
+        margin: 0 0 0 20px;
+    }
+    .vol{
+        margin: 30px;
+        
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+</style>
+<div class="info">
+    <h2>General Settings</h2>
+</div>
+<div class="vol">
     <form action="" method="POST">
-      {% csrf_token %}
-      {% for field in form %}
-          <p>
-              {{field.label_tag}}
-              <br>
-              {{field}}
-              {% if field.help_text %}
-                  <!-- <small style="color: grey;">{{field.help_text}}</small> -->
-              {% endif %}
-              {% for error in field.errors %}
-                  <small style="color: red;">{{error}}</small>
-              {% endfor %}
-          </p>
-      {% endfor %}
-      <button class="btn btn-black" type="submit">Save</button>
-    </form>
- </div>
+        {% csrf_token %}
+        {% for field in form %}
+            <p>
+                {{field.label_tag}}
+                <br>
+                {{field}}
+                {% if field.help_text %}
+                    <!-- <small style="color: grey;">{{field.help_text}}</small> -->
+                {% endif %}
+                {% for error in field.errors %}
+                    <small style="color: red;">{{error}}</small>
+                {% endfor %}
+            </p>
+        {% endfor %}
+        <button class="btn btn-black" type="submit">Save</button>
+      </form>   
+    <span class="btn material-icons " style="font-size: 30px;" >volume_up</span>
+    <input type="range" id="volume-control">
+    <span class="btn material-icons " style="font-size: 30px;" >volume_down</span>
+    
+</div>
+
+
+<script type="text/javascript">
+
+
+let volume = document.querySelector("#volume-control");
+volume.addEventListener("change", function(e) {
+audio.volume = e.currentTarget.value / 100;
+})
+
+</script>
+
 {% endblock content %}
     

@@ -1,39 +1,21 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<meta name="Description" content="Enter your description here"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css">
-<link href="{% static 'css/login.css' %}" rel="stylesheet" type="text/css" media="all" /><title>Title</title>
+{% extends 'base.html' %}
 
-<link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
-<body>
-   <div class="sidenav">
-      <div class="login-main-text">
-         <h2>Welcome {{request.user.driver_name}} to<br> Driver Drowsiness Detection System</h2>
-      </div>
-   </div>
-   <div class="main">
-      <div class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
-         <div class="ms-auto mb-2 mb-lg-0">
-            <a href="{% url 'settings' %}"> <span class="btn material-icons " style="font-size: 30px;" >settings</span></a>           
-            <a href="#"> <span class="btn material-icons " style="font-size: 30px;" >account_circle</span></a>           
-            <a href="{% url 'logout' %}"> <span class="btn material-icons " style="font-size: 30px;" >logout</span></a>           
-         </div>
-      </div>
-      <div class="col-md-6 col-sm-12">
-         <img src="{% url 'webcam feed' %}" alt="" srcset="">
-      </div>
-      <p>Alert:  {{message}}</p>
-   </div>
-   <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.5.4/umd/popper.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.0-beta1/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% block content %}
+<style>
+   #cambox{
+      padding-left: 45%;
+      margin-top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+   }
+</style>
+<div>
+   <h2 style="color: crimson;"> Attention Driver!</h2>
+   <h4>Your activities are being logged!</h4>
+</div>
+<div class="col-md-6 col-sm-12" id="cambox" >
+   <img width="720" src="{% url 'webcam feed' %}" alt="" srcset="">
+</div>
+{% endblock content %}
+   

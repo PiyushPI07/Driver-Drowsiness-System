@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<style>
+    .info{
+        margin: 50px 0 100px 10px;
+    }
+    .login-form{
+        margin: 0 0 0 20px;
+    }
+</style>
+<div class="info">
+    <h2>Edit your account settings below</h2>
+</div>
+<div class="login-form">
+    <form action="" method="POST">
+      {% csrf_token %}
+      {% for field in form %}
+          <p>
+              {{field.label_tag}}
+              <br>
+              {{field}}
+              {% if field.help_text %}
+                  <!-- <small style="color: grey;">{{field.help_text}}</small> -->
+              {% endif %}
+              {% for error in field.errors %}
+                  <small style="color: red;">{{error}}</small>
+              {% endfor %}
+          </p>
+      {% endfor %}
+      <button class="btn btn-black" type="submit">Save</button>
+    </form>
+ </div>
+{% endblock content %}
+    

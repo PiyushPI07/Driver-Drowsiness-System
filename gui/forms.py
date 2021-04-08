@@ -7,7 +7,7 @@ class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=60)
     class Meta:
         model = Account
-        fields = ('dl_number', 'driver_name', 'email', 'phone_number', 'emergency_phn', 'alert_tone')
+        fields = ('dl_number', 'driver_name', 'email', 'phone_number', 'emergency_phn')
 class SettingsForm(forms.ModelForm):
     # email = forms.EmailField(max_length=60, widget = forms.TextInput(attrs={'readonly':'readonly'}))
     # dl_number = forms.EmailField(max_length=60, widget = forms.TextInput(attrs={'readonly':'readonly'}))
@@ -15,7 +15,10 @@ class SettingsForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ('dl_number', 'driver_name', 'email', 'phone_number', 'emergency_phn')
-
+class ChangeAlertForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ('alert_tone',)
 class LoginForm(forms.ModelForm):
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
     class Meta:

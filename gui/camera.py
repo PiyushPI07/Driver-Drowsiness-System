@@ -46,7 +46,7 @@ class Webcam(object):
     audio=os.path.join(path, "buzzer_alarm.mp3")
     message = ""
     def __init__(self):
-        self.webcam = VideoStream(src=0).start()
+        self.webcam = VideoStream(src=-1).start()
         time.sleep(1.0)
         self.sleep_count = 0
         self.max_sleep_count = 30
@@ -61,8 +61,9 @@ class Webcam(object):
 
     def stop(self):
         cv2.destroyAllWindows()
-        self.webcam.stop()
+        self.webcam.stream.release()
     def read(self):
+        # eye_avg_ratio = 0
         frame = self.webcam.read()
         frame = imutils.resize(frame, width=450)
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -107,6 +108,8 @@ class Webcam(object):
                         cv2.putText(frame, "Sleep Detector: " + str(CurrentTime), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0xFF, 0xFF, 0xFF0), 2)
                         print(self.normal_eye_ratio)
                 self.normal_count+=1
+            if len(faces) == 0:
+                eye_avg_ratio = 0
             else:
                     if(self.normal_eye_ratio - eye_avg_ratio > 0.05):
                         self.sleep_count +=1

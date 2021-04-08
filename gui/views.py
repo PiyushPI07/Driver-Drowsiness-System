@@ -70,37 +70,34 @@ def login_view(request):
         form = LoginForm()
     return render(request, 'login.html', context={'login_form':form})
 
-def settings_view(request):
+def acc_settings_view(request):
     context = {}
     if request.user.is_authenticated:
         user = Account.objects.get(email=request.user.email)
-        # if request.method == 'POST':
-        # initial = {
-        #     'dl_number': user.dl_number,
-        #     'driver_name': user.driver_name,
-        #     'email': user.email,
-        #     # 'phone_number': user.phone_number,
-        #     # 'emergency_phn': user.emergency_phn,
-        # }
         edit_form = SettingsForm(request.POST or None, instance=user)
-        print(edit_form.data.keys())
         if edit_form.is_valid():
-            # edit_form.cleaned_data['dl_number'] = user.dl_number
-            # edit_form.cleaned_data['driver_name'] = user.driver_name
-            # edit_form.cleaned_data['email'] = user.email
             edit_form.save()
-            print("saved")
-            # else:
-            #     context['form']= edit_form
-        # else:
-        #     edit_form = SettingsForm(instance=user)
-        #     context['form'] = edit_form
+            return redirect('logout')
         context['form'] = edit_form
+        return render(request, 'acc_settings.html', context)
+    else:
+        return redirect('login')
+
+def setting_view(request):
+    context = {}
+    if request.user.is_authenticated:
+        user = Account.objects.get(email=request.user.email)
+        form = ChangeAlertForm(request.POST or None, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('logout')
+        context['form'] = form
         return render(request, 'settings.html', context)
     else:
         return redirect('login')
 def logout_view(request):
     global web_cam
     web_cam.stop()
+    cv2.destroyAllWindows()
     logout(request)
     return redirect('login')

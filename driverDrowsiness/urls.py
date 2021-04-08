@@ -23,5 +23,6 @@ urlpatterns = [
     path('webcam/', webcam_feed, name = 'webcam feed'),
     path('home/', webcam_home, name = 'home'),
     path('logout/', logout_view, name = 'logout'),
-    path('settings/', settings_view, name = 'settings'),
+    path('acc_settings/', acc_settings_view, name = 'acc_settings'),
+    path('setting', setting_view, name="settings")
 ]
